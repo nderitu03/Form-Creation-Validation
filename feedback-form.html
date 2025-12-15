@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      padding: 40px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 30px;
+      padding: 14px 30px;
+      background-color: #6200ee;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3700b3;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    .success {
+      color: green;
+      font-size: 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Send Us Your Feedback ❤️</h1>
+
+    <form id="feedbackForm">
+      
+      <!-- Email Field -->
+      <label for="email">Your Email:</label>
+      <input type="text" id="email" name="email" required>
+      <div class="error" id="emailError"></div>
+
+      <!-- Age Field -->
+      <label for="age">Your Age:</label>
+      <input type="number" id="age" name="age">
+      <div class="error" id="ageError"></div>
+
+      <!-- Message Field -->
+      <label for="message">Your Feedback Message:</label>
+      <textarea id="message" name="message" rows="8" placeholder="Write your thoughts here..."></textarea>
+      <div class="error" id="messageError"></div>
+      <small>Max 100 words • Max 5000 characters • Current: <span id="wordCount">0</span> words / <span id="charCount">0</span> chars</small>
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+
+    <div class="success" id="successMessage" style="display:none;">
+      Thank you! Your feedback was sent successfully! 🎉
+    </div>
+  </div>
+
+  <script>
+    // Step 1: Get the form and all the elements we need
+    const form = document.getElementById('feedbackForm');
+    const emailInput = document.getElementById('email');
+    const ageInput = document.getElementById('age');
+    const messageInput = document.getElementById('message');
+
+    const emailError = document.getElementById('emailError');
+    const ageError = document.getElementById('ageError');
+    const messageError = document.getElementById('messageError');
+    const successMessage = document.getElementById('successMessage');
+
+    const wordCountSpan = document.getElementById('wordCount');
+    const charCountSpan = document.getElementById('charCount');
+
+    // Step 2: Update word and character count in real-time
+    messageInput.addEventListener('input', function() {
+      const text = messageInput.value;
+      const words = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+      const chars = text.length;
+
+      wordCountSpan.textContent = words;
+      charCountSpan.textContent = chars;
+    });
+
+    // Step 3: Main validation when user clicks Submit
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); // Stop the form from submitting normally
+
+      // Reset all error messages first
+      emailError.textContent = '';
+      ageError.textContent = '';
+      messageError.textContent = '';
+      successMessage.style.display = 'none';
+
+      let isValid = true; // Will become false if any check fails
+
+      // Validate Email
+      const emailValue = emailInput.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple but good email check
+      if (!emailRegex.test(emailValue)) {
+        emailError.textContent = 'Please enter a valid email (example: user@gmail.com)';
+        isValid = false;
+      }
+
+      // Validate Age
+      const ageValue = parseInt(ageInput.value);
+      if (isNaN(ageValue) || ageValue < 18 || ageValue > 99) {
+        ageError.textContent = 'Age must be a number between 18 and 99';
+        isValid = false;
+      }
+
+      // Validate Message
+      const messageText = messageInput.value.trim();
+      const wordCount = messageText === '' ? 0 : messageText.split(/\s+/).filter(word => word.length > 0).length;
+
+      if (messageText === '') {
+        messageError.textContent = 'Please write your feedback message';
+        isValid = false;
+      } else if (wordCount > 100) {
+        messageError.textContent = 'Message too long! Maximum 100 words allowed.';
+        isValid = false;
+      } else if (messageText.length > 5000) {
+        messageError.textContent = 'Message too long! Maximum 5000 characters allowed.';
+        isValid = false;
+      }
+
+      // Final Step: If everything is good → show success!
+      if (isValid) {
+        successMessage.style.display = 'block';
+        // In real project, you would send data to server here
+        // For now, we just show success message
+        console.log('Form is valid! Ready to send:', {
+          email: emailValue,
+          age: ageValue,
+          message: messageText,
+          words: wordCount
+        });
+        // Optional: Reset form after success
+        // form.reset();
+      }
+    });
+  </script>
+
+</body>
+</html>
