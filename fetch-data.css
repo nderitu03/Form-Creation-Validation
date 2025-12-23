@@ -1,0 +1,35 @@
+/* main font and background for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+/* center container with white card look */
+#content {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+/* title styling */
+h1 {
+    text-align: center;
+    color: #333;
+}
+/* remove default bullet points from lis */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+/* style for each user name box */
+li {
+    background: #e2e2e2;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+}
